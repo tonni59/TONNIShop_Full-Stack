@@ -3,25 +3,25 @@ import './NewCollections.css';
 import Item from '../Item/Item';
 
 const NewCollections = () => {
-    const [new_collection, setNew_collection] = useState([]);
+    const [newCollection, setNewCollection] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchNewCollections = async () => {
             try {
-                const res = await fetch("http://localhost:4000/newcollections");
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/newcollections`);
 
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
 
                 const data = await res.json();
-                console.log("Fetched new collections:", data);
-                setNew_collection(data);
+                console.log("✅ New collections fetched:", data);
+                setNewCollection(data);
             } catch (err) {
-                console.error("Failed to fetch new collections:", err);
-                setError(true);
+                console.error("❌ Failed to fetch new collections:", err);
+                setError("Failed to load collections.");
             } finally {
                 setLoading(false);
             }
@@ -36,17 +36,17 @@ const NewCollections = () => {
             <hr />
 
             {loading && <p>Loading collections...</p>}
-            {error && <p>Failed to load collections. Please check your backend.</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
 
             <div className="collections">
-                {!loading && new_collection.length === 0 && !error && (
+                {!loading && newCollection.length === 0 && !error && (
                     <p>No new collections found.</p>
                 )}
 
-                {new_collection.map((item, i) => (
+                {newCollection.map((item, i) =>
                     item && item.image ? (
                         <Item
-                            key={i}
+                            key={item.id || i}
                             id={item.id}
                             name={item.name}
                             image={item.image}
@@ -58,7 +58,7 @@ const NewCollections = () => {
                             Skipping invalid product (missing image or data).
                         </p>
                     )
-                ))}
+                )}
             </div>
         </div>
     );
