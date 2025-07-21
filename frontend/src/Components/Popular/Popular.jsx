@@ -1,31 +1,50 @@
 import React, { useEffect, useState } from "react";
-import './Popular.css'
-import Item from '../Item/Item'; // ✅ Adjust path if needed
-
+import "./Popular.css";
+import Item from "../Item/Item"; // ✅ Make sure this path is correct
 
 const Popular = () => {
+  const [popularProducts, setPopularProducts] = useState([]);
+  const API = process.env.REACT_APP_API_BASE;
 
-    const [popularProducts,setPopularProducts] = useState([]);
+  useEffect(() => {
+    const fetchPopular = async () => {
+      try {
+        const response = await fetch(`${API}/popularinwomen`);
+        const data = await response.json();
+        setPopularProducts(data);
+        console.log("✅ Popular products fetched:", data);
+      } catch (error) {
+        console.error("❌ Failed to load popular products:", error);
+      }
+    };
 
-    useEffect(()=>{
-        fetch('http://localhost:4000/popularinwomen')
-        .then((response)=>response.json())
-        .then((data)=>setPopularProducts(data));
-    },[])
+    fetchPopular();
+  }, [API]);
 
-    return (
-        <div className="popular">
-            <h1>POPULAR IN WOMEN</h1>
-            <hr></hr>
-            <div className="popular-item">
-                {popularProducts.map((item, i) => {
-                    return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}></Item>
+  return (
+    <div className="popular">
+      <h1>POPULAR IN WOMEN</h1>
+      <hr />
+      <div className="popular-item">
+        {popularProducts.length > 0 ? (
+          popularProducts.map((item, i) => (
+            <Item
+              key={i}
+              id={item.id}
+              name={item.name}
+              image={item.image}
+              new_price={item.new_price}
+              old_price={item.old_price}
+            />
+          ))
+        ) : (
+          <p style={{ color: "gray", marginTop: "2rem" }}>
+            No popular items found.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
 
-                })}
-            </div>
-
-        </div>
-    )
-}
-
-export default Popular
+export default Popular;
