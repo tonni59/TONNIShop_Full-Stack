@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const cors = require("cors");
 const fs = require("fs");
-require("dotenv").config(); // Load .env variables
+require("dotenv\config")();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -67,7 +67,9 @@ app.post('/addproduct', async (req, res) => {
       image: req.body.image,
       category: req.body.category,
       new_price: Number(req.body.new_price),
-      old_price: Number(req.body.old_price)
+      old_price: Number(req.body.old_price),
+      available: req.body.available !== undefined ? req.body.available : true,
+      date: new Date()
     });
 
     await product.save();
