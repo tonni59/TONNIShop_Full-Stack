@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Product</title>
+</head>
+<body>
+  <h2>Add Product</h2>
+
+  <form id="productForm">
+    <input type="text" name="name" placeholder="Product Name" required /><br />
+    <input type="number" name="id" placeholder="Product ID" required /><br />
+    <input type="number" name="old_price" placeholder="Old Price" required /><br />
+    <input type="number" name="new_price" placeholder="New Price" required /><br />
+    <input type="text" name="category" placeholder="Category" required /><br />
+    <input type="text" name="image" placeholder="Image URL (e.g. http://localhost:4000/images/yourfile.png)" required /><br />
+    <button type="submit">Submit Product</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('productForm');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const product = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('http://localhost:4000/addproduct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        });
+
+        const result = await res.json();
+        document.getElementById('response').innerText = `✅ Success: ${JSON.stringify(result)}`;
+      } catch (err) {
+        document.getElementById('response').innerText = `❌ Error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

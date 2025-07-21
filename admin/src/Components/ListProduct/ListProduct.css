@@ -1,0 +1,130 @@
+.list-product {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.list-product h1 {
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.listproduct-format-main {
+  display: grid;
+  grid-template-columns: 80px 2fr 1fr 1fr 1fr 60px;
+  gap: 10px;
+  align-items: center;
+  font-weight: 600;
+  color: #444;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.listproduct-allproducts {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.listproduct-format {
+  font-weight: 400;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease-in-out;
+}
+
+.listproduct-format:hover {
+  background-color: #f1f1f1;
+}
+
+.listproduct-product-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.listproduct-remove-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.listproduct-remove-icon:hover {
+  transform: scale(1.15);
+  filter: brightness(0.8);
+}
+
+.listproduct-allproducts{
+    overflow-y: auto;
+}
+/* For screens ≤ 1200px */
+@media (max-width: 1200px) {
+  .listproduct-format-main {
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr 40px;
+    font-size: 14px;
+  }
+}
+
+/* For screens ≤ 1024px */
+@media (max-width: 1024px) {
+  .listproduct-format-main {
+    grid-template-columns: 60px 2fr 1fr 1fr 1fr 40px;
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .listproduct-product-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .listproduct-remove-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* For screens ≤ 800px */
+@media (max-width: 800px) {
+  .listproduct-format-main {
+    grid-template-columns: 50px 1.5fr 1fr 1fr 1fr 35px;
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  .list-product h1 {
+    font-size: 22px;
+  }
+}
+
+/* For screens ≤ 500px */
+@media (max-width: 500px) {
+  .listproduct-format-main {
+    grid-template-columns: 40px 1.5fr 1fr 1fr;
+    grid-template-areas:
+      "img name remove remove";
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .listproduct-product-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .listproduct-remove-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .list-product h1 {
+    font-size: 18px;
+  }
+}
