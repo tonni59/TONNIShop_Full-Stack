@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 // Create context
 export const ShopContext = createContext(null);
 
-// Function to initialize an empty cart with product IDs 1–300
+// Function to initialize an empty cart
 const getDefaultCart = () => {
   let cart = {};
   for (let index = 1; index <= 300; index++) {
@@ -11,6 +11,9 @@ const getDefaultCart = () => {
   }
   return cart;
 };
+
+// Read base URL from .env
+const API_BASE = process.env.REACT_APP_API_BASE;
 
 const ShopContextProvider = (props) => {
   const [all_product, setAll_Product] = useState([]);
@@ -23,7 +26,7 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const response = await fetch("http://localhost:4000/allproducts");
+        const response = await fetch(`${API_BASE}/allproducts`);
         const data = await response.json();
         setAll_Product(data);
         console.log("✅ Products loaded from backend");
@@ -47,9 +50,8 @@ const ShopContextProvider = (props) => {
       [itemId]: (prev[itemId] || 0) + 1,
     }));
 
-    // Sync with backend if logged in
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/addtocart", {
+      fetch(`${API_BASE}/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -64,7 +66,6 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  // Remove item from cart (decrease quantity)
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({
       ...prev,
@@ -72,7 +73,6 @@ const ShopContextProvider = (props) => {
     }));
   };
 
-  // Fully remove item from cart (quantity = 0)
   const removeItemCompletely = (itemId) => {
     setCartItems((prev) => ({
       ...prev,
@@ -80,7 +80,6 @@ const ShopContextProvider = (props) => {
     }));
   };
 
-  // Get total cart amount (price × quantity)
   const getTotalCartAmount = () => {
     let total = 0;
     for (const itemId in cartItems) {
@@ -95,7 +94,6 @@ const ShopContextProvider = (props) => {
     return total;
   };
 
-  // Get total number of items in cart (only where quantity > 0)
   const getTotalCartItems = () => {
     return Object.values(cartItems).reduce(
       (sum, qty) => (qty > 0 ? sum + qty : sum),
