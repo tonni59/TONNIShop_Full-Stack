@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const cors = require("cors");
 const fs = require("fs");
-require("dotenv\config")();
+require("dotenv").config(); // ✅ Fixed dotenv import
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -37,7 +37,7 @@ const upload = multer({ storage });
 // Serve static image files
 app.use('/images', express.static(path.join(__dirname, 'upload/images')));
 
-// Product Schema
+// -------------------- Product Schema --------------------
 const Product = mongoose.model("Product", {
   id: { type: Number, required: true },
   name: { type: String, required: true },
@@ -49,13 +49,13 @@ const Product = mongoose.model("Product", {
   available: { type: Boolean, default: true }
 });
 
-// Upload Image
+// -------------------- Image Upload --------------------
 app.post("/upload", upload.single('product'), (req, res) => {
   const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   res.json({ success: 1, image_url: imageUrl });
 });
 
-// Add Product
+// -------------------- Add Product --------------------
 app.post('/addproduct', async (req, res) => {
   try {
     const lastProduct = await Product.findOne().sort({ id: -1 });
@@ -80,25 +80,25 @@ app.post('/addproduct', async (req, res) => {
   }
 });
 
-// Delete Product
+// -------------------- Remove Product --------------------
 app.post('/removeproduct', async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
   res.json({ success: true, name: req.body.name });
 });
 
-// All Products
+// -------------------- All Products --------------------
 app.get('/allproducts', async (req, res) => {
   const products = await Product.find({});
   res.send(products);
 });
 
-// ✅ New Collections (latest 8)
+// -------------------- New Collections --------------------
 app.get('/newcollections', async (req, res) => {
   const products = await Product.find({}).sort({ date: -1 }).limit(8);
   res.send(products);
 });
 
-// ✅ Popular in Women (case-insensitive match)
+// -------------------- Popular in Women --------------------
 app.get('/popularinwomen', async (req, res) => {
   const products = await Product.find({
     category: { $regex: new RegExp("women", "i") }
@@ -106,7 +106,7 @@ app.get('/popularinwomen', async (req, res) => {
   res.send(products);
 });
 
-// ✅ Related Products (dynamic category match)
+// -------------------- Related Products --------------------
 app.get('/relatedproducts/:category', async (req, res) => {
   try {
     const category = req.params.category;
@@ -119,7 +119,7 @@ app.get('/relatedproducts/:category', async (req, res) => {
   }
 });
 
-// User Schema
+// -------------------- User Schema --------------------
 const Users = mongoose.model("Users", {
   name: String,
   email: { type: String, unique: true },
@@ -128,7 +128,7 @@ const Users = mongoose.model("Users", {
   date: { type: Date, default: Date.now }
 });
 
-// Signup
+// -------------------- Signup --------------------
 app.post('/signup', async (req, res) => {
   const existingUser = await Users.findOne({ email: req.body.email });
   if (existingUser) {
@@ -150,7 +150,7 @@ app.post('/signup', async (req, res) => {
   res.json({ success: true, token });
 });
 
-// Login
+// -------------------- Login --------------------
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findOne({ email });
@@ -163,7 +163,7 @@ app.post('/login', async (req, res) => {
   res.json({ success: true, token });
 });
 
-// Middleware for auth
+// -------------------- Auth Middleware --------------------
 const fetchuser = (req, res, next) => {
   const token = req.header('auth-token');
   if (!token) return res.status(401).json({ errors: "Token missing" });
@@ -177,7 +177,7 @@ const fetchuser = (req, res, next) => {
   }
 };
 
-// Add to Cart
+// -------------------- Add to Cart --------------------
 app.post('/addtocart', fetchuser, async (req, res) => {
   const user = await Users.findById(req.user.id);
   user.cartData[req.body.itemId] += 1;
@@ -185,12 +185,12 @@ app.post('/addtocart', fetchuser, async (req, res) => {
   res.send("Added");
 });
 
-// Root Route
+// -------------------- Root Route --------------------
 app.get("/", (req, res) => {
-  res.send("🚀 Express App is Running");
+  res.send("🚀 TONNIShop Backend is Running");
 });
 
-// Start Server
+// -------------------- Start Server --------------------
 app.listen(PORT, () => {
   console.log(`✅ Server Running on http://localhost:${PORT}`);
 });
