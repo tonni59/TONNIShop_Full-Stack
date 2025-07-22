@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Popular.css";
-import Item from "../Item/Item"; // ✅ Make sure this path is correct
+import Item from "../Item/Item";
 
 const Popular = () => {
   const [popularProducts, setPopularProducts] = useState([]);
-  const API = process.env.REACT_APP_API_BASE;
+
+  // 🔗 Direct Render backend URL
+  const API = "https://tonnishop-backend-8fr7.onrender.com";
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -19,7 +21,7 @@ const Popular = () => {
     };
 
     fetchPopular();
-  }, [API]);
+  }, []);
 
   return (
     <div className="popular">
