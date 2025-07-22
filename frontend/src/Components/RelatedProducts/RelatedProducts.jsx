@@ -7,7 +7,8 @@ const RelatedProducts = ({ category, excludeId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const API = process.env.REACT_APP_API_BASE;
+  // 🔗 Direct Render backend URL
+  const API = "https://tonnishop-backend-8fr7.onrender.com";
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
@@ -32,7 +33,7 @@ const RelatedProducts = ({ category, excludeId }) => {
     };
 
     fetchRelatedProducts();
-  }, [API, category, excludeId]);
+  }, [category, excludeId]);
 
   return (
     <div className="relatedproducts">
